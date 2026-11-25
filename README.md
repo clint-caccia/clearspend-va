@@ -25,4 +25,4 @@ Government spending data is public, but it is hard for most people to read in ra
 ## Author
 
 **Clint Caccia**, Computer Information Systems, James Madison University
-[LinkedIn](https://www.linkedin.com/in/clint-caccia/)
+[LinkedIn](https://www.linkedin.com/in/clint-caccia-b70428354)
