@@ -1,0 +1,54 @@
+// ClearSpend VA measures. Paste each one into Power BI with "New measure".
+// Assumes the tables from data/powerbi/ (or Azure SQL) plus the FiscalYears table below.
+
+// ---- Calculated table (Modeling > New table) ----
+// Shared year list so one slicer filters both fact tables.
+FiscalYears =
+DISTINCT (
+    UNION (
+        VALUES ( fact_monthly[fiscal_year] ),
+        VALUES ( fact_vendor_year[fiscal_year] )
+    )
+)
+
+// ---- Measures ----
+Total Spend =
+SUM ( fact_monthly[amount] )
+
+Refunds =
+SUM ( fact_monthly[refund_amount] )
+
+Transactions =
+SUM ( fact_monthly[txn_count] )
+
+Months Reported =
+DISTINCTCOUNT ( fact_monthly[fiscal_month] )
+
+// Same months of the prior year, so an 11-month year isn't compared to a 12-month one.
+Prior Year Spend =
+VAR fy = SELECTEDVALUE ( FiscalYears[fiscal_year] )
+VAR months = VALUES ( fact_monthly[fiscal_month] )
+RETURN
+    CALCULATE (
+        [Total Spend],
+        FiscalYears[fiscal_year] = fy - 1,
+        TREATAS ( months, fact_monthly[fiscal_month] )
+    )
+
+YoY Change =
+[Total Spend] - [Prior Year Spend]
+
+YoY % =
+DIVIDE ( [YoY Change], [Prior Year Spend] )
+
+Share of Selected =
+DIVIDE ( [Total Spend], CALCULATE ( [Total Spend], ALLSELECTED ( dim_agency ) ) )
+
+Vendor Spend =
+SUM ( fact_vendor_year[amount] )
+
+Organization Vendor Spend =
+CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Organization" )
+
+Withheld Individual Spend =
+CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Individual (withheld)" )
