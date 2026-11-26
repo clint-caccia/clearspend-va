@@ -1,0 +1,33 @@
+relationship e5406d71-f053-41d6-9f8a-53b47697fc7f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_monthly.month
+	toColumn: LocalDateTable_4e9a5bae-4ac1-4c7f-96bb-3679137e7546.Date
+
+relationship AutoDetected_64b97518-ac6f-4ed4-98a5-370f3ca97a72
+	fromColumn: fact_monthly.agency_id
+	toColumn: dim_agency.agency_id
+
+relationship AutoDetected_bf3c508a-4786-4cf6-84fe-f83c6e8827ed
+	fromColumn: fact_vendor_year.agency_id
+	toColumn: dim_agency.agency_id
+
+relationship AutoDetected_994e7dcd-e00a-40bc-bf6b-a740a7849b24
+	fromColumn: vendor_concentration.agency
+	toColumn: dim_agency.agency
+
+relationship AutoDetected_42ce4405-869c-412f-8274-fe33f5cb8bb4
+	fromColumn: fact_vendor_year.vendor_id
+	toColumn: dim_vendor.vendor_id
+
+relationship fy_fact_monthly
+	fromColumn: fact_monthly.fiscal_year
+	toColumn: FiscalYears.fiscal_year
+
+relationship fy_fact_vendor_year
+	fromColumn: fact_vendor_year.fiscal_year
+	toColumn: FiscalYears.fiscal_year
+
+relationship fy_vendor_concentration
+	fromColumn: vendor_concentration.fiscal_year
+	toColumn: FiscalYears.fiscal_year
+

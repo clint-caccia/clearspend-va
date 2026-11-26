@@ -1,0 +1,99 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 269.24478525316454,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 337.02990193359267,
+            "y": 249.84729003644213
+          },
+          "nodeIndex": "dim_agency",
+          "nodeLineageTag": "27c52105-0781-4307-9f7d-7a0642164465",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 623.24478525316442,
+            "y": 235.60892155835631
+          },
+          "nodeIndex": "dim_vendor",
+          "nodeLineageTag": "089ccf4f-05fa-4fd1-abb4-1219921cfd0e",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 328.81799655931741
+          },
+          "nodeIndex": "fact_monthly",
+          "nodeLineageTag": "2a0f861d-f318-41fd-a50a-1ddd8524c300",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 622.39330054372886,
+            "y": 438.41495635241563
+          },
+          "nodeIndex": "fact_vendor_year",
+          "nodeLineageTag": "cab3bcf1-3ccf-4fe4-bfe6-30167a20bebb",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 125.8185430507765,
+            "y": -50
+          },
+          "nodeIndex": "vendor_concentration",
+          "nodeLineageTag": "cf59bf19-b5a0-4a21-ab80-b7be45d3bb92",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 857.24478525316442,
+            "y": 256.20747817620781
+          },
+          "nodeIndex": "FiscalYears",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

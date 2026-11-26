@@ -1,0 +1,5 @@
+expression DataFolder = "C:\Users\clint\Documents\clearspend-va\data\powerbi" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 6b1f6f3e-2d0e-4c55-9a51-0c1e5a9b7d21
+
+	annotation PBI_ResultType = Text
+

@@ -1,0 +1,18 @@
+table FiscalYears
+	lineageTag: 5313f3ac-272d-4d51-ad75-e8059811f257
+
+	column fiscal_year
+		formatString: 0
+		lineageTag: bf8709dd-9037-4d60-a243-3572a0f96ab0
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: fact_monthly[fiscal_year]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FiscalYears = calculated
+		mode: import
+		source = DISTINCT ( UNION ( VALUES ( fact_monthly[fiscal_year] ), VALUES ( fact_vendor_year[fiscal_year] ) ) )
+
+	annotation PBI_Id = 7206c88850c74250bca65912c37b6afb
+

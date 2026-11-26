@@ -1,0 +1,109 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.15.0/schema.json",
+  "name": "74f92b1d56f7c661d4ce",
+  "position": {
+    "x": 20,
+    "y": 110,
+    "z": 2,
+    "height": 955,
+    "width": 900,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_vendor"
+                    }
+                  },
+                  "Property": "vendor"
+                }
+              },
+              "queryRef": "dim_vendor.vendor",
+              "nativeQueryRef": "vendor",
+              "displayName": "Vendor"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_vendor_year"
+                    }
+                  },
+                  "Property": "Organization Vendor Spend"
+                }
+              },
+              "queryRef": "fact_vendor_year.Organization Vendor Spend",
+              "nativeQueryRef": "Organization Vendor Spend",
+              "displayName": "Paid"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_vendor_year"
+                    }
+                  },
+                  "Property": "Agencies Paying"
+                }
+              },
+              "queryRef": "fact_vendor_year.Agencies Paying",
+              "nativeQueryRef": "Agencies Paying",
+              "displayName": "Agencies paying"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_vendor_year"
+                  }
+                },
+                "Property": "Organization Vendor Spend"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Largest vendors'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

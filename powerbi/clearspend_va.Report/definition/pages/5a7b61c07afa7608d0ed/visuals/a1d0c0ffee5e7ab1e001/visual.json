@@ -1,0 +1,109 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.15.0/schema.json",
+  "name": "a1d0c0ffee5e7ab1e001",
+  "position": {
+    "x": 20,
+    "y": 580,
+    "z": 5,
+    "height": 485,
+    "width": 1880,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_agency"
+                    }
+                  },
+                  "Property": "agency"
+                }
+              },
+              "queryRef": "dim_agency.agency",
+              "nativeQueryRef": "agency",
+              "displayName": "Agency"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_agency"
+                    }
+                  },
+                  "Property": "secretariat"
+                }
+              },
+              "queryRef": "dim_agency.secretariat",
+              "nativeQueryRef": "secretariat",
+              "displayName": "Secretariat"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_vendor_year"
+                    }
+                  },
+                  "Property": "Unreported Vendor Detail"
+                }
+              },
+              "queryRef": "fact_vendor_year.Unreported Vendor Detail",
+              "nativeQueryRef": "Unreported Vendor Detail",
+              "displayName": "Spending with no vendor detail"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_vendor_year"
+                  }
+                },
+                "Property": "Unreported Vendor Detail"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Agencies that report totals instead of vendors'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

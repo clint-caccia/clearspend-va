@@ -1,0 +1,154 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.15.0/schema.json",
+  "name": "2d44d90ae5a235086d4c",
+  "position": {
+    "x": 940,
+    "y": 110,
+    "z": 3,
+    "height": 955,
+    "width": 960,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vendor_concentration"
+                    }
+                  },
+                  "Property": "agency"
+                }
+              },
+              "queryRef": "vendor_concentration.agency",
+              "nativeQueryRef": "agency",
+              "displayName": "Agency"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vendor_concentration"
+                    }
+                  },
+                  "Property": "Vendors"
+                }
+              },
+              "queryRef": "vendor_concentration.Vendors",
+              "nativeQueryRef": "Vendors",
+              "displayName": "Vendors"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vendor_concentration"
+                    }
+                  },
+                  "Property": "Paid to Vendors"
+                }
+              },
+              "queryRef": "vendor_concentration.Paid to Vendors",
+              "nativeQueryRef": "Paid to Vendors",
+              "displayName": "Paid to vendors"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vendor_concentration"
+                    }
+                  },
+                  "Property": "Top Vendor Share"
+                }
+              },
+              "queryRef": "vendor_concentration.Top Vendor Share",
+              "nativeQueryRef": "Top Vendor Share",
+              "displayName": "Top vendor share"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vendor_concentration"
+                    }
+                  },
+                  "Property": "HHI Score"
+                }
+              },
+              "queryRef": "vendor_concentration.HHI Score",
+              "nativeQueryRef": "HHI Score",
+              "displayName": "HHI"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "vendor_concentration"
+                  }
+                },
+                "Property": "HHI Score"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Vendor concentration (agencies with 10+ vendors, HHI above 2,500 is concentrated)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

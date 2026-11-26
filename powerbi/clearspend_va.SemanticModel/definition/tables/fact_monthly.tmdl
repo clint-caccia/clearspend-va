@@ -1,0 +1,153 @@
+table fact_monthly
+	lineageTag: 2a0f861d-f318-41fd-a50a-1ddd8524c300
+
+	measure 'Total Spend' = SUM ( fact_monthly[amount] )
+		formatString: \$#,0
+		lineageTag: aaceb6b3-1033-4390-8c35-830c37942076
+
+	measure Refunds = SUM ( fact_monthly[refund_amount] )
+		formatString: \$#,0
+		lineageTag: 2d1af5f3-6a32-4347-a788-1bf795f08a76
+
+	measure Transactions = SUM ( fact_monthly[txn_count] )
+		formatString: #,0
+		lineageTag: 78c4c569-4072-4f77-b93b-ae7394094fc9
+
+	measure 'Months Reported' = DISTINCTCOUNT ( fact_monthly[month] )
+		formatString: 0
+		lineageTag: 2e59cfdf-731c-41e0-a344-3b7c2aeebf28
+
+	measure 'Prior Year Spend' =
+			VAR fy = SELECTEDVALUE ( FiscalYears[fiscal_year] )
+			VAR months = VALUES ( fact_monthly[fiscal_month] )
+			RETURN
+			    CALCULATE (
+			        [Total Spend],
+			        FiscalYears[fiscal_year] = fy - 1,
+			        TREATAS ( months, fact_monthly[fiscal_month] )
+			    )
+		formatString: \$#,0
+		lineageTag: d5aeb518-b81b-4d38-a276-f8af2dd56410
+
+	measure 'YoY Change' = IF ( NOT ISBLANK ( [Prior Year Spend] ), [Total Spend] - [Prior Year Spend] )
+		formatString: \$#,0
+		lineageTag: ba9f7352-604f-49fc-9bdf-edcb2271a629
+
+	measure 'YoY %' = DIVIDE ( [YoY Change], [Prior Year Spend] )
+		formatString: 0.0%
+		lineageTag: 3ebb29ef-26d4-447e-8283-54623e58dea3
+
+	measure 'Share of Selected' = DIVIDE ( [Total Spend], CALCULATE ( [Total Spend], ALLSELECTED ( dim_agency ) ) )
+		formatString: 0.0%
+		lineageTag: 7ec834e4-7e83-4fe2-8c81-2dd5f2402699
+
+	column agency_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 942bfabe-9ca1-4b50-8053-65a07cc23b0b
+		summarizeBy: none
+		sourceColumn: agency_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 53055501-e531-459f-951d-9dff7ced2d51
+		summarizeBy: sum
+		sourceColumn: fiscal_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e4505805-8742-4ffc-bbb8-6777dc0f3a9f
+		summarizeBy: none
+		sourceColumn: month
+
+		variation Variation
+			isDefault
+			relationship: e5406d71-f053-41d6-9f8a-53b47697fc7f
+			defaultHierarchy: LocalDateTable_4e9a5bae-4ac1-4c7f-96bb-3679137e7546.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fund
+		dataType: string
+		lineageTag: 29099436-625e-43ed-9ea9-890908e2a046
+		summarizeBy: none
+		sourceColumn: fund
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: c43cc9a9-944e-449d-b2aa-1f027a15d162
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column expense_type
+		dataType: string
+		lineageTag: 183fd45a-94e8-49cf-9043-7e203108a010
+		summarizeBy: none
+		sourceColumn: expense_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: double
+		lineageTag: 1cdab76e-30f7-4fa0-9b90-1e77d8ec1041
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column refund_amount
+		dataType: double
+		lineageTag: fc98fd2c-2d4e-44fe-8e18-483be6079bd7
+		summarizeBy: sum
+		sourceColumn: refund_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column txn_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 7cb3334e-632b-4e09-a693-96e2011db3c3
+		summarizeBy: sum
+		sourceColumn: txn_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 67ecfeed-73c6-4240-8100-0e7fea52425d
+		summarizeBy: sum
+		sourceColumn: fiscal_month
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_monthly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_monthly.csv"), [Delimiter=",", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"agency_id", Int64.Type}, {"fiscal_year", Int64.Type}, {"month", type date}, {"fund", type text}, {"category", type text}, {"expense_type", type text}, {"amount", type number}, {"refund_amount", type number}, {"txn_count", Int64.Type}, {"fiscal_month", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

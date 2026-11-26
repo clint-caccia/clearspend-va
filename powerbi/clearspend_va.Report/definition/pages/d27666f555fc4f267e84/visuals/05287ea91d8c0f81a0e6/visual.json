@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.15.0/schema.json",
+  "name": "05287ea91d8c0f81a0e6",
+  "position": {
+    "x": 20,
+    "y": 110,
+    "z": 3,
+    "height": 150,
+    "width": 455,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly"
+                    }
+                  },
+                  "Property": "Total Spend"
+                }
+              },
+              "queryRef": "fact_monthly.Total Spend",
+              "nativeQueryRef": "Total Spend",
+              "displayName": "Total spend"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,87 @@
+table fact_vendor_year
+	lineageTag: cab3bcf1-3ccf-4fe4-bfe6-30167a20bebb
+
+	measure 'Vendor Spend' = SUM ( fact_vendor_year[amount] )
+		formatString: \$#,0
+		lineageTag: 69d53604-2e86-4414-b987-14451d338f33
+
+	measure 'Organization Vendor Spend' = CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Organization" )
+		formatString: \$#,0
+		lineageTag: 8484fda0-e81b-4aee-a02d-d471ffc1ba7c
+
+	measure 'Agencies Paying' = CALCULATE ( DISTINCTCOUNT ( fact_vendor_year[agency_id] ), dim_vendor[vendor_type] = "Organization" )
+		formatString: #,0
+		lineageTag: 5744d449-7ba2-429f-84e0-19d1d99854ea
+
+	measure 'Unreported Vendor Detail' = CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Not reported" )
+		formatString: \$#,0
+		lineageTag: 2a70ac00-b782-4481-b797-d17b030fc7be
+
+	column agency_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 06de11ba-7e2d-4c3c-a25a-06d9889e46f6
+		summarizeBy: none
+		sourceColumn: agency_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8221c43f-2745-4c36-9675-98c026448957
+		summarizeBy: none
+		sourceColumn: vendor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year
+		dataType: int64
+		formatString: 0
+		lineageTag: fb393a03-a917-4db6-854f-cdf1f2e2698e
+		summarizeBy: sum
+		sourceColumn: fiscal_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 772797aa-cd0c-438a-a154-0194f2f731c3
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: double
+		lineageTag: cbd6ea41-a6fa-4235-a6bb-8e8e650ea2e3
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column txn_count
+		dataType: int64
+		formatString: 0
+		lineageTag: f47cd51e-d423-4352-aee5-63ba03687d77
+		summarizeBy: sum
+		sourceColumn: txn_count
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_vendor_year = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_vendor_year.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"agency_id", Int64.Type}, {"vendor_id", Int64.Type}, {"fiscal_year", Int64.Type}, {"category", type text}, {"amount", type number}, {"txn_count", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

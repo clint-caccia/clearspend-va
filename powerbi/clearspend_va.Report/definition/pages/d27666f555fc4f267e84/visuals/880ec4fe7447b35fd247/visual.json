@@ -1,0 +1,154 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.15.0/schema.json",
+  "name": "880ec4fe7447b35fd247",
+  "position": {
+    "x": 20,
+    "y": 690,
+    "z": 9,
+    "height": 375,
+    "width": 1880,
+    "tabOrder": 9
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_agency"
+                    }
+                  },
+                  "Property": "agency"
+                }
+              },
+              "queryRef": "dim_agency.agency",
+              "nativeQueryRef": "agency",
+              "displayName": "Agency"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_agency"
+                    }
+                  },
+                  "Property": "secretariat"
+                }
+              },
+              "queryRef": "dim_agency.secretariat",
+              "nativeQueryRef": "secretariat",
+              "displayName": "Secretariat"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly"
+                    }
+                  },
+                  "Property": "Total Spend"
+                }
+              },
+              "queryRef": "fact_monthly.Total Spend",
+              "nativeQueryRef": "Total Spend",
+              "displayName": "Total spend"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly"
+                    }
+                  },
+                  "Property": "Prior Year Spend"
+                }
+              },
+              "queryRef": "fact_monthly.Prior Year Spend",
+              "nativeQueryRef": "Prior Year Spend",
+              "displayName": "Prior year (same months)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly"
+                    }
+                  },
+                  "Property": "YoY Change"
+                }
+              },
+              "queryRef": "fact_monthly.YoY Change",
+              "nativeQueryRef": "YoY Change",
+              "displayName": "Change"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_monthly"
+                    }
+                  },
+                  "Property": "YoY %"
+                }
+              },
+              "queryRef": "fact_monthly.YoY %",
+              "nativeQueryRef": "YoY %",
+              "displayName": "Change %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_monthly"
+                  }
+                },
+                "Property": "Total Spend"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Agencies'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

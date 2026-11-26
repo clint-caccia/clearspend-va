@@ -1,0 +1,42 @@
+table dim_vendor
+	lineageTag: 089ccf4f-05fa-4fd1-abb4-1219921cfd0e
+
+	column vendor_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 79d89dfa-1bf0-4928-bee1-d9d15868ffe2
+		summarizeBy: none
+		sourceColumn: vendor_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor
+		dataType: string
+		lineageTag: b39dfb76-1bc3-4040-8c57-02eb363b7ba0
+		summarizeBy: none
+		sourceColumn: vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_type
+		dataType: string
+		lineageTag: 81e66143-093a-4fb4-90e1-da66f0ace451
+		summarizeBy: none
+		sourceColumn: vendor_type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_vendor = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_vendor.csv"), [Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"vendor_id", Int64.Type}, {"vendor", type text}, {"vendor_type", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

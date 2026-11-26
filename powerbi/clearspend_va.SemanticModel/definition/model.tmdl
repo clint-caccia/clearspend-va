@@ -1,0 +1,26 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["dim_agency","dim_vendor","fact_monthly","fact_vendor_year","vendor_concentration","DataFolder"]
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","TMDLView_Desktop","DevMode"]
+
+ref table dim_agency
+ref table dim_vendor
+ref table fact_monthly
+ref table DateTableTemplate_a39be754-47fd-45c5-9561-e8c0e55af203
+ref table LocalDateTable_4e9a5bae-4ac1-4c7f-96bb-3679137e7546
+ref table fact_vendor_year
+ref table vendor_concentration
+ref table FiscalYears
+
+ref cultureInfo en-US
+

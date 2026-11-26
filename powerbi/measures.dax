@@ -1,5 +1,5 @@
-// ClearSpend VA measures. Paste each one into Power BI with "New measure".
-// Assumes the tables from data/powerbi/ (or Azure SQL) plus the FiscalYears table below.
+// ClearSpend VA measures. These are already in clearspend_va.pbip; this file is a readable copy,
+// and you can paste them with "New measure" if you build the model yourself.
 
 // ---- Calculated table (Modeling > New table) ----
 // Shared year list so one slicer filters both fact tables.
@@ -22,7 +22,7 @@ Transactions =
 SUM ( fact_monthly[txn_count] )
 
 Months Reported =
-DISTINCTCOUNT ( fact_monthly[fiscal_month] )
+DISTINCTCOUNT ( fact_monthly[month] )
 
 // Same months of the prior year, so an 11-month year isn't compared to a 12-month one.
 Prior Year Spend =
@@ -36,7 +36,7 @@ RETURN
     )
 
 YoY Change =
-[Total Spend] - [Prior Year Spend]
+IF ( NOT ISBLANK ( [Prior Year Spend] ), [Total Spend] - [Prior Year Spend] )
 
 YoY % =
 DIVIDE ( [YoY Change], [Prior Year Spend] )
@@ -52,3 +52,23 @@ CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Organization" )
 
 Withheld Individual Spend =
 CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Individual (withheld)" )
+
+Agencies Paying =
+CALCULATE ( DISTINCTCOUNT ( fact_vendor_year[agency_id] ), dim_vendor[vendor_type] = "Organization" )
+
+Unreported Vendor Detail =
+CALCULATE ( [Vendor Spend], dim_vendor[vendor_type] = "Not reported" )
+
+// ---- On the vendor_concentration table (v_vendor_concentration.csv) ----
+// Only agencies with 10+ vendors, which skips pass-through accounts.
+Vendors =
+IF ( MAX ( vendor_concentration[vendor_count] ) >= 10, MAX ( vendor_concentration[vendor_count] ) )
+
+Paid to Vendors =
+IF ( [Vendors] > 0, SUM ( vendor_concentration[vendor_spend] ) )
+
+Top Vendor Share =
+IF ( [Vendors] > 0, MAX ( vendor_concentration[top_vendor_share] ) )
+
+HHI Score =
+IF ( [Vendors] > 0, MAX ( vendor_concentration[hhi] ) )

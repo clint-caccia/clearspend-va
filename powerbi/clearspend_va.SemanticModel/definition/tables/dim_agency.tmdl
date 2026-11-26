@@ -1,0 +1,50 @@
+table dim_agency
+	lineageTag: 27c52105-0781-4307-9f7d-7a0642164465
+
+	column agency_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d1b0485-d326-43c1-b253-abf8ddec4f55
+		summarizeBy: none
+		sourceColumn: agency_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column agency
+		dataType: string
+		lineageTag: b63d707f-9c21-45bf-8bba-c7c9ba6a2e25
+		summarizeBy: none
+		sourceColumn: agency
+
+		annotation SummarizationSetBy = Automatic
+
+	column secretariat
+		dataType: string
+		lineageTag: ac0432f2-2a4b-41c3-831d-3d4bd0a1ee63
+		summarizeBy: none
+		sourceColumn: secretariat
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch
+		dataType: string
+		lineageTag: a2f4a2db-31f2-4d54-80d5-2e5a44ceed46
+		summarizeBy: none
+		sourceColumn: branch
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_agency = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_agency.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"agency_id", Int64.Type}, {"agency", type text}, {"secretariat", type text}, {"branch", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
