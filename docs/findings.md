@@ -97,12 +97,11 @@ Only payees that are clearly organizations are ranked. People, payroll and ledge
 
 ## Where one vendor gets most of the money
 
-Of the 84 agencies that paid at least $25M to outside organizations in FY2025, **22** were highly concentrated (HHI above 2,500, a common cutoff for a concentrated market). High concentration isn't automatically a problem, since some agencies exist to pay one big contractor or managed care plan, but it's where a vendor change or contract dispute would hurt most. The table skips accounts with fewer than 10 vendors, since those are mostly pass-through accounts (wire business units, treasury disbursement accounts) that exist to send money to one place.
+Of the 81 agencies that paid at least $25M to outside organizations in FY2025, **21** were highly concentrated (HHI above 2,500, a common cutoff for a concentrated market). High concentration isn't automatically a problem, since some agencies exist to pay one big contractor or managed care plan, but it's where a vendor change or contract dispute would hurt most. The table skips accounts with fewer than 10 vendors, since those are mostly pass-through accounts (wire business units, treasury disbursement accounts) that exist to send money to one place.
 
 | Agency | Vendors | Paid to vendors | Top vendor share | HHI |
 |---|---|---|---|---|
 | Dept of Human Resource Mgt | 41 | $77.4M | 92% | 8,478 |
-| Commonwealth Savers Plan | 158 | $189.8M | 89% | 7,890 |
 | VCSP Wire Business Unit | 12 | $28.8M | 87% | 7,594 |
 | Admin of Health Insurance | 109 | $3.17B | 85% | 7,280 |
 | Department of Forensic Science | 209 | $85.5M | 77% | 5,938 |
@@ -111,17 +110,18 @@ Of the 84 agencies that paid at least $25M to outside organizations in FY2025, *
 | Department of Accounts | 26 | $70.9M | 44% | 2,778 |
 | Dept of Rail & Public Trans | 145 | $898.5M | 41% | 2,616 |
 | Dept of Ed Central Operations | 280 | $111.3M | 49% | 2,565 |
+| Dept of Corr - Central Admin | 191 | $115.1M | 45% | 2,267 |
 
 ## Data notes
 
 | Year | Months | Transactions | Unreadable | Refunds/reversals | No vendor | Individual (withheld) | Ledger adjustments |
 |---|---|---|---|---|---|---|---|
 | FY2024 | 12 | 3,140,325 | 0 | 205,623 | 701,114 | 393,117 | 489,980 |
-| FY2025 | 12 | 3,136,055 | 5 | 184,961 | 718,386 | 401,882 | 390,752 |
-| FY2026 | 11 | 2,778,995 | 0 | 160,918 | 648,109 | 349,332 | 323,181 |
+| FY2025 | 12 | 3,136,055 | 5 | 184,961 | 718,386 | 401,883 | 390,752 |
+| FY2026 | 11 | 2,778,995 | 0 | 160,918 | 648,109 | 349,333 | 323,181 |
 
 - **Ledger adjustments.** About 30% of FY2025 dollars carry "MISCELLANEOUS ADJUSTMENT" or "WARRANT REGISTER" in the vendor column instead of a real payee. They count toward agency totals but are left out of vendor rankings.
-- **Vendor detail not reported.** About 15% of dollars, almost all from the public universities and UVA Medical Center, are listed as "** DETAILED DATA NOT YET AVAILABLE **". Those schools mostly run their own financial systems, which is likely why the state file only has their totals. Their spending counts toward agency totals but can't be broken down by vendor.
+- **Vendor detail not reported.** About 15% of dollars, mostly from the public universities and UVA Medical Center, are listed as "** DETAILED DATA NOT YET AVAILABLE **" or "CONTACT AGENCY FOR MORE INFO". The universities mostly run their own financial systems, which is likely why the state file only has their totals. This spending counts toward agency totals but can't be broken down by vendor.
 - **No vendor.** About 9% of dollars have a blank vendor, which is mostly payroll.
 - **People are never named.** Payments to individuals (0.6% of dollars) are grouped as "Individual or small payee (name withheld)". The rule errs toward hiding, so some small businesses end up in that group too.
 - **FY2025 file format.** Most FY2025 monthly files were exported as padded text with no quotes, so commas inside values ("Travel, Personal Vehicle") break a normal CSV reader and would silently drop about 1 in 6 rows. The pipeline splits those files on their fixed column positions instead, and skips the stray SQL*Plus error lines a few of them contain.

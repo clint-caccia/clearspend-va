@@ -2,7 +2,7 @@
 
 ![tests](https://github.com/clint-caccia/clearspend-va/actions/workflows/tests.yml/badge.svg)
 
-ClearSpend VA takes every expenditure transaction Virginia state agencies report (about 9 million rows across FY2024 to FY2026) and turns it into a database, a set of SQL views and a written findings report, ready for a Power BI dashboard.
+ClearSpend VA takes every expenditure transaction Virginia state agencies report (about 9 million rows across FY2024 to FY2026) and turns it into a database, a set of SQL views, a written findings report and a Power BI dashboard.
 
 The data comes from [Commonwealth Data Point](https://www.datapoint.apa.virginia.gov), which the Virginia Auditor of Public Accounts publishes. It's all public, but it comes as one zip per year of 55 to 280 MB monthly CSVs, which is hard to do anything with in raw form. I wanted to see where the money actually goes, and I wanted a project that goes all the way from messy raw files to something a manager could read.
 
@@ -14,7 +14,7 @@ From [docs/findings.md](docs/findings.md), which the pipeline writes from the da
 - FY2026 has 11 months published so far, and spending is up **7.3%** over the same 11 months of FY2025.
 - Health and Human Resources and Education are **67%** of all spending. Medical Assistance Services (Medicaid) alone was $24.5B in FY2025, up 12.5%, and it's up another 17.6% so far in FY2026.
 - The biggest vendor that's clearly an outside organization is Anthem Health Plans of Virginia at $2.77B in FY2025, paid by 16 agencies.
-- 22 of the 84 agencies that paid at least $25M to outside organizations had highly concentrated vendor spending (HHI above 2,500).
+- 21 of the 81 agencies that paid at least $25M to outside organizations had highly concentrated vendor spending (HHI above 2,500).
 
 ![Spending by secretariat](docs/img/spend_by_secretariat.png)
 
@@ -48,7 +48,7 @@ This took most of the time, and it's the part I learned the most from.
 
 - **Most of FY2025 was in a different format.** Eleven of the twelve FY2025 files were exported as space-padded text with no quotes. Any comma inside a value, like `Travel, Personal Vehicle` or `SMITH, JOHN`, splits it into extra columns, and a normal CSV reader either throws an error or drops the row. That was about 1 in 6 rows. The columns are padded to fixed widths though, so the pipeline finds where the real separators are and splits each line on those positions instead.
 - **Error messages inside the data.** Some of those files have `SP2-0044: For a list of known commands enter HELP` lines mixed in, left over from the database tool that exported them. They're skipped and counted.
-- **Not every "vendor" is a vendor.** About 30% of dollars have `MISCELLANEOUS ADJUSTMENT` or `WARRANT REGISTER` in the vendor column, and about 15% (mostly the universities and UVA Medical Center) say `** DETAILED DATA NOT YET AVAILABLE **`. Both still count toward agency totals but are kept out of vendor rankings, or the top "vendor" in the state would be a placeholder.
+- **Not every "vendor" is a vendor.** About 30% of dollars have `MISCELLANEOUS ADJUSTMENT` or `WARRANT REGISTER` in the vendor column, and about 15% (mostly the universities and UVA Medical Center) say `** DETAILED DATA NOT YET AVAILABLE **` or `CONTACT AGENCY FOR MORE INFO`. Both still count toward agency totals but are kept out of vendor rankings, or the top "vendor" in the state would be a placeholder.
 - **People's names.** A lot of payees are individuals getting reimbursements. The pipeline groups anything that could be a person's name as "Individual or small payee (name withheld)" and only shows a name when something marks it as an organization, like `INC`, `COUNTY` or an acronym. It errs toward hiding, so some small businesses get grouped too, which I think is the right tradeoff.
 - **The same company spelled different ways.** `Anthem Health Plans of Virginia` and `ANTHEM HEALTH PLANS OF VA` are merged by uppercasing, stripping punctuation and legal suffixes, and standardizing a few words.
 - **A partial year.** FY2026 is missing June so far, so comparing it to a full FY2025 would make every agency look like it shrank. The partial year is compared month for month against the same months of the year before.
@@ -72,7 +72,7 @@ If the download gets blocked, download the "All Expenditures for Fiscal Year" zi
 What you get:
 
 - `data/clearspend.db` SQLite database with the tables and views
-- `data/powerbi/` the same tables and views as CSV for Power BI
+- `data/powerbi/` the same tables and views as CSV, which the Power BI project reads
 - `docs/findings.md` and `docs/img/` the written report and charts
 
 Tests:
@@ -100,9 +100,23 @@ If your password has special characters like `@` or `#`, URL-encode them in the 
 
 If the Azure OpenAI variables are set, `run.py` sends the finished findings report (aggregated numbers only, no transactions) to a model deployment and saves a short plain-English briefing to `docs/ai_summary.md`. The prompt tells it to only use numbers that are in the report and to say "the data doesn't show" instead of guessing at causes. See [clearspend/ai_summary.py](clearspend/ai_summary.py) for the variables.
 
-## Power BI
+## Power BI dashboard
 
-[powerbi/README.md](powerbi/README.md) walks through loading the data, the relationships, the DAX measures in [powerbi/measures.dax](powerbi/measures.dax) (including a prior year measure that only compares matching months) and the page layout.
+The dashboard is saved as a Power BI project in [powerbi/](powerbi/), so the report and the model are text files in the repo. It has three pages, and each one has a fiscal year slicer.
+
+**Overview:** totals, change vs the same months last year, spending by secretariat and by month, and every agency with its prior year and change.
+
+![Power BI overview page](docs/img/powerbi_overview.png)
+
+**Vendors:** the largest outside organizations, and how concentrated each agency's vendor spending is.
+
+![Power BI vendors page](docs/img/powerbi_vendors.png)
+
+**Data notes:** where the money goes when the vendor column isn't a real vendor, and which agencies only report totals.
+
+![Power BI data notes page](docs/img/powerbi_data_notes.png)
+
+[powerbi/README.md](powerbi/README.md) covers how to open it, the model and the DAX measures, including a prior year measure that only compares matching months.
 
 ## Project layout
 
@@ -117,7 +131,7 @@ clearspend/
   insights.py           writes docs/findings.md
   ai_summary.py         optional Azure OpenAI briefing
 sql/views.sql           analysis views
-powerbi/                DAX measures, theme and build guide
+powerbi/                Power BI project (report + model as text files) and DAX measures
 tests/                  pytest tests, including both FY2025 file formats
 ```
 
