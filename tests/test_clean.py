@@ -36,18 +36,20 @@ def make_zip(tmp_path, members):
 
 def test_vendor_privacy_groups():
     assert clean.classify_vendor("SMITH,JOHN A") == clean.INDIVIDUAL
-    assert clean.classify_vendor("YI CHUN SAUNDERS") == clean.INDIVIDUAL
-    assert clean.classify_vendor("KAREN L LOFTIN PC") == clean.INDIVIDUAL
+    assert clean.classify_vendor("MARY ANN SAMPLE") == clean.INDIVIDUAL
+    assert clean.classify_vendor("JANE Q PUBLIC PC") == clean.INDIVIDUAL
     assert clean.classify_vendor("") == clean.NO_VENDOR
     assert clean.classify_vendor(None) == clean.NO_VENDOR
-    assert clean.classify_vendor("Jason Harvey") == clean.INDIVIDUAL
-    assert clean.classify_vendor("BEAUPRE SR, PAUL F") == clean.INDIVIDUAL
+    assert clean.classify_vendor("Pat Example") == clean.INDIVIDUAL
+    assert clean.classify_vendor("SAMPLE SR, JOHN Q") == clean.INDIVIDUAL
+    assert clean.classify_vendor("0000000000000000000JANE Q PUBLIC") == clean.INDIVIDUAL
 
 
 def test_accounting_entries_are_not_vendors():
     assert clean.classify_vendor("MISCELLANEOUS ADJUSTMENT") == clean.ACCOUNTING
     assert clean.classify_vendor("WARRANT REGISTER - BOA") == clean.ACCOUNTING
     assert clean.classify_vendor("** DETAILED DATA NOT YET AVAILABLE **") == clean.NOT_REPORTED
+    assert clean.classify_vendor("CONTACT AGENCY FOR MORE INFO") == clean.NOT_REPORTED
 
 
 def test_companies_named_like_people_still_show_when_registered():

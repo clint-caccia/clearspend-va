@@ -55,12 +55,12 @@ NOT_REPORTED = "Vendor detail not reported"
 # Ledger entries that show up in the vendor column but aren't payees at all.
 ACCOUNTING_RE = re.compile(r"^\W*(MISCELLANEOUS ADJUSTMENT|WARRANT REGISTER\b|JOURNAL ENTRY|ADJUSTMENT)")
 # Placeholder some agencies (mostly universities) use instead of per-vendor detail.
-NOT_REPORTED_RE = re.compile(r"^\W*DETAILED DATA NOT YET AVAILABLE")
+NOT_REPORTED_RE = re.compile(r"^\W*(DETAILED DATA NOT YET AVAILABLE|CONTACT AGENCY FOR MORE INFO)")
 # A corporate suffix means a registered business, so the name is safe to show.
 CORP_SUFFIX = re.compile(
     r"\b(INC|INCORPORATED|LLC|L L C|LLP|LLLP|LTD|CORP|CORPORATION|CO|COMPANY|LP|PLC|NA|N A|GMBH|USA)\b\.?"
 )
-# Suffixes a one-person practice uses. "KAREN L LOFTIN PC" is still a person's name.
+# Suffixes a one-person practice uses. "JANE Q PUBLIC PC" is still a person's name.
 PERSONAL_SUFFIX = re.compile(r"(?:[ ,]+(?:P\.?\s?C|PLLC|P\.?\s?A|ESQ|MD|DDS|DMD|PHD|CPA|JR|SR|II|III|IV)\.?)+$")
 # Words that mark a payee as an organization rather than a person.
 ORG_WORDS = re.compile(
@@ -82,9 +82,9 @@ ORG_WORDS = re.compile(
     r"THEATER|ARTS|CARE|LIVING|SENIOR|CHILDREN|FAMILY|YOUTH|HOUSING|SHELTER|RECOVERY|COUNSELING|"
     r"THERAPY|DENTAL|VISION|PEDIATRICS|ASSISTED|NURSING|REHAB|REHABILITATION|THE|OF|AND|FOR)\b"
 )
-# "SMITH,JOHN A" or "Saini,Ajay": letters, one comma, letters.
+# "SMITH,JOHN A" or "Sample,Alex": letters, one comma, letters.
 COMMA_PERSON = re.compile(r"^[A-Za-z'\-. ]+,\s?[A-Za-z'\-. ]+$")
-# "YI CHUN SAUNDERS" or "KAREN L LOFTIN": two to four plain words, no digits.
+# "MARY ANN SAMPLE" or "JANE Q PUBLIC": two to four plain words, no digits.
 PLAIN_NAME = re.compile(r"^[A-Za-z'\-.]+(?: [A-Za-z'\-.]+){1,3}$")
 # In a mixed-case name, a short all-caps token is an acronym ("Western Tidewater CSB").
 ACRONYM = re.compile(r"\b[A-Z]{2,5}\b")
@@ -117,7 +117,8 @@ def classify_vendor(raw) -> str:
     """Map a raw vendor string to a cleaned name, or to one of the two privacy groups."""
     if raw is None or (isinstance(raw, float) and pd.isna(raw)):
         return NO_VENDOR
-    text = str(raw).strip()
+    # some names come zero-padded ("0000000000000000000JANE Q PUBLIC")
+    text = re.sub(r"^0{3,}", "", str(raw).strip()).strip()
     if not text:
         return NO_VENDOR
     if ACCOUNTING_RE.match(text.upper()):
