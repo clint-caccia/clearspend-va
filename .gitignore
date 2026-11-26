@@ -1,0 +1,7 @@
+# raw and processed data are big; run.py rebuilds them
+data/
+*.pbix.bak
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
