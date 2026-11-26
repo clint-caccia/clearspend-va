@@ -1,7 +1,11 @@
 # raw and processed data are big; run.py rebuilds them
 data/
-*.pbix.bak
 __pycache__/
 *.pyc
 .pytest_cache/
 .env
+
+# Power BI local files
+*.pbix
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
